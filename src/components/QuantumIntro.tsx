@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import * as anime from "animejs";
 
 export default function QuantumIntro() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -10,36 +9,43 @@ export default function QuantumIntro() {
     useEffect(() => {
         if (!containerRef.current) return;
 
-        const animeObj = (anime as any).default || anime;
+        let timeline: any;
 
-        const timeline = animeObj.timeline({
-            easing: "easeInOutQuart",
-            complete: () => {
-                setIsVisible(false);
-            },
+        import("animejs").then((animeModule: any) => {
+            const anime = animeModule.default || animeModule;
+
+            timeline = anime.timeline({
+                easing: "easeInOutQuart",
+                complete: () => {
+                    anime({
+                        targets: containerRef.current,
+                        opacity: 0,
+                        duration: 800,
+                        easing: "easeOutExpo",
+                        complete: () => setIsVisible(false),
+                    });
+                },
+            });
+
+            timeline
+                .add({
+                    targets: "#logo-path",
+                    strokeDashoffset: [anime.setDashoffset, 0],
+                    duration: 1500,
+                    delay: 500,
+                })
+                .add({
+                    targets: ".boot-text",
+                    opacity: [0, 1],
+                    translateY: [20, 0],
+                    delay: anime.stagger(100),
+                    duration: 800,
+                });
         });
 
-        timeline
-            .add({
-                targets: "#logo-path",
-                strokeDashoffset: [animeObj.setDashoffset, 0],
-                duration: 1500,
-                delay: 500,
-            })
-            .add({
-                targets: ".boot-text",
-                opacity: [0, 1],
-                translateY: [20, 0],
-                delay: animeObj.stagger(100),
-                duration: 800,
-            })
-            .add({
-                targets: containerRef.current,
-                opacity: 0,
-                duration: 1000,
-                delay: 500,
-                easing: "easeInExpo",
-            });
+        return () => {
+            if (timeline) timeline.pause();
+        };
     }, []);
 
     if (!isVisible) return null;
@@ -47,8 +53,17 @@ export default function QuantumIntro() {
     return (
         <div
             ref={containerRef}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
-            style={{ isolation: "isolate" }}
+            className="quantum-intro"
+            style={{
+                position: "fixed",
+                inset: 0,
+                zIndex: 100,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#000",
+            }}
         >
             <svg
                 width="200"
@@ -66,31 +81,17 @@ export default function QuantumIntro() {
                 <circle cx="50" cy="50" r="10" stroke="#00FFC2" strokeWidth="0.2" opacity="0.5" />
             </svg>
 
-            <div className="mt-8 flex flex-col items-center">
-                <p className="boot-text mono text-xs text-[#00FFC2]">INITIALIZING_NEURO_MATRIX...</p>
-                <p className="boot-text mono text-xs text-[#7F7F7F] mt-1">ESTABLISHING_LANCE_DB_SYNC</p>
-                <p className="boot-text mono text-xs text-[#00FFC2] mt-1">STATUS: STABLE</p>
+            <div style={{ marginTop: "2rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <p className="boot-text" style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "#00FFC2", opacity: 0 }}>
+                    INITIALIZING_NEURO_MATRIX...
+                </p>
+                <p className="boot-text" style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "#7F7F7F", marginTop: "0.25rem", opacity: 0 }}>
+                    ESTABLISHING_LANCE_DB_SYNC
+                </p>
+                <p className="boot-text" style={{ fontFamily: "monospace", fontSize: "0.75rem", color: "#00FFC2", marginTop: "0.25rem", opacity: 0 }}>
+                    STATUS: STABLE
+                </p>
             </div>
-
-            <style jsx>{`
-        .fixed {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-        }
-        .bg-black { background-color: #000; }
-        .flex { display: flex; }
-        .flex-col { flex-direction: column; }
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
-        .z-50 { z-index: 50; }
-        .inset-0 { top: 0; left: 0; right: 0; bottom: 0; }
-        .mt-8 { margin-top: 2rem; }
-        .text-xs { font-size: 0.75rem; }
-        .mt-1 { margin-top: 0.25rem; }
-      `}</style>
         </div>
     );
 }
