@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;700&family=Space+Mono&display=swap');
+
+:root {
+  --background: #020202;
+  --foreground: #ffffff;
+  --primary: #00FFC2; /* Electric Mint */
+  --secondary: #7F7F7F; /* Neutral Gray */
+  --accent: #FF0055; /* Pulse Magenta */
+  --grid-color: rgba(0, 255, 194, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Urbanist', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+code {
+  font-family: 'Space Mono', monospace;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.mono {
+  font-family: 'Space Mono', monospace;
+}
+
+.glow-text {
+  text-shadow: 0 0 10px var(--primary);
+}
+
+.accent-glow {
+  text-shadow: 0 0 10px var(--accent);
+}
