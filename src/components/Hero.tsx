@@ -8,8 +8,10 @@ export default function Hero() {
     useEffect(() => {
         import("animejs").then((animeModule: any) => {
             const anime = animeModule.default || animeModule;
+            // v4 main export is often the animate function itself or 'animate'
+            const animate = anime.animate || anime;
 
-            anime({
+            animate({
                 targets: ".hero-title",
                 opacity: [0, 1],
                 translateY: [100, 0],
@@ -18,7 +20,7 @@ export default function Hero() {
                 delay: 3000,
             });
 
-            anime({
+            animate({
                 targets: ".hero-sub",
                 opacity: [0, 1],
                 translateX: [-50, 0],

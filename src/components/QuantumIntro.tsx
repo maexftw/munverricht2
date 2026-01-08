@@ -12,17 +12,33 @@ export default function QuantumIntro() {
         let timeline: any;
 
         import("animejs").then((animeModule: any) => {
+            // Anime.js v4 API Adaptation
             const anime = animeModule.default || animeModule;
 
-            timeline = anime.timeline({
-                easing: "easeInOutQuart",
+            // Use createTimeline if available (v4), fallback to anime.timeline (v3 compat)
+            // Based on inspection, 'Timeline' is exported, and 'createTimeline'.
+            const createTimeline = anime.createTimeline || anime.timeline;
+            // Stagger is exported as 'stagger'
+            const stagger = anime.stagger;
+            // setDashoffset might be in utils or direct export. 
+            // Inspection showed 'set' but not 'setDashoffset'. 
+            // Common v4 pattern is using the 'svg' helper or manual calculation.
+            // However, for safety, we'll try to find it or define a helper.
+            const setDashoffset = anime.setDashoffset || ((el: any) => {
+                const pathLength = anime.setDashoffset ? anime.setDashoffset(el) : el.getTotalLength();
+                el.setAttribute('stroke-dasharray', pathLength);
+                return pathLength;
+            });
+
+            timeline = createTimeline({
+                defaults: { easing: "easeInOutQuart" }, // v4 uses defaults
                 complete: () => {
-                    anime({
+                    anime.animate({ // v4 uses animate() or anime()
                         targets: containerRef.current,
                         opacity: 0,
                         duration: 800,
                         easing: "easeOutExpo",
-                        complete: () => setIsVisible(false),
+                        onComplete: () => setIsVisible(false), // v4 uses onComplete
                     });
                 },
             });
@@ -30,7 +46,7 @@ export default function QuantumIntro() {
             timeline
                 .add({
                     targets: "#logo-path",
-                    strokeDashoffset: [anime.setDashoffset, 0],
+                    strokeDashoffset: [anime.setDashoffset ? anime.setDashoffset : (el: any) => el.getTotalLength(), 0],
                     duration: 1500,
                     delay: 500,
                 })
@@ -38,7 +54,7 @@ export default function QuantumIntro() {
                     targets: ".boot-text",
                     opacity: [0, 1],
                     translateY: [20, 0],
-                    delay: anime.stagger(100),
+                    delay: stagger(100),
                     duration: 800,
                 });
         });
@@ -53,7 +69,6 @@ export default function QuantumIntro() {
     return (
         <div
             ref={containerRef}
-            className="quantum-intro"
             style={{
                 position: "fixed",
                 inset: 0,
@@ -63,6 +78,7 @@ export default function QuantumIntro() {
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: "#000",
+                isolation: "isolate"
             }}
         >
             <svg

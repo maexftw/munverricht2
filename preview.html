@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Munverricht | Neuro-Digital Matrix – Local Preview</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Urbanist:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Anime.js v4 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@4.0.0/lib/anime.min.js"></script>
+    
+    <style>
+        :root {
+            --color-bg: #020202;
+            --color-primary: #00FFC2;
+            --color-secondary: #7F7F7F;
+            --color-accent: #FF0055;
+            --font-heading: 'Urbanist', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            color: #fff;
+            font-family: var(--font-mono);
+            overflow-x: hidden;
+        }
+        
+        /* Technical Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 194, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 194, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Intro Overlay */
+        #intro {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+        }
+        
+        .boot-text {
+            font-size: 0.75rem;
+            opacity: 0;
+            margin-top: 0.25rem;
+        }
+        
+        .boot-text.mint { color: var(--color-primary); }
+        .boot-text.gray { color: var(--color-secondary); }
+        
+        /* Hero Section */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            max-width: 56rem;
+            width: 100%;
+        }
+        
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--color-primary);
+            opacity: 0;
+            text-shadow: 
+                0 0 20px rgba(0, 255, 194, 0.5),
+                0 0 40px rgba(0, 255, 194, 0.3);
+        }
+        
+        .hero-title span {
+            color: #fff;
+        }
+        
+        .hero-sub {
+            margin-top: 3rem;
+            opacity: 0;
+        }
+        
+        .hero-sub p {
+            font-size: 1.125rem;
+            color: var(--color-secondary);
+            max-width: 28rem;
+            line-height: 1.6;
+        }
+        
+        .project-label {
+            margin-top: 2rem;
+            opacity: 0;
+        }
+        
+        .project-label span {
+            display: block;
+        }
+        
+        .project-label .label {
+            font-size: 0.75rem;
+            color: var(--color-secondary);
+        }
+        
+        .project-label .value {
+            font-size: 0.875rem;
+            color: var(--color-primary);
+            margin-top: 0.25rem;
+        }
+        
+        /* Status Bar */
+        #status-bar {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 50;
+            font-size: 0.7rem;
+            color: var(--color-secondary);
+            opacity: 0;
+        }
+        
+        #status-bar .indicator {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Intro Overlay -->
+    <div id="intro">
+        <svg width="200" height="200" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path id="logo-path" d="M20 50L50 20L80 50L50 80L20 50Z" stroke="#00FFC2" stroke-width="0.5" />
+            <circle id="logo-circle" cx="50" cy="50" r="10" stroke="#00FFC2" stroke-width="0.2" opacity="0.5" />
+        </svg>
+        
+        <div style="margin-top: 2rem; text-align: center;">
+            <p class="boot-text mint">INITIALIZING_NEURO_MATRIX...</p>
+            <p class="boot-text gray">ESTABLISHING_LANCE_DB_SYNC</p>
+            <p class="boot-text mint">STATUS: STABLE</p>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                ENGINEERING<br>
+                <span>PRECISION.</span>
+            </h1>
+            
+            <div class="hero-sub">
+                <p>Scientific data-driven development focusing on high-performance architectures and ultra-responsive aesthetics.</p>
+            </div>
+            
+            <div class="project-label">
+                <span class="label">PROJECT_NAME</span>
+                <span class="value">MUNVERRICHT_ORB_V4</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Status Bar -->
+    <div id="status-bar">
+        <span class="indicator"></span>
+        SYSTEM_ONLINE | LANCE_DB_CONNECTED | LATENCY: 12ms
+    </div>
+
+    <script>
+        // Wait for anime.js to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Intro Timeline (based on RAG: anime.timeline with .add() and stagger)
+            const introTimeline = anime.timeline({
+                easing: 'easeInOutQuart',
+                complete: function() {
+                    // Fade out intro
+                    anime({
+                        targets: '#intro',
+                        opacity: 0,
+                        duration: 800,
+                        easing: 'easeOutExpo',
+                        complete: function() {
+                            document.getElementById('intro').style.display = 'none';
+                            // Start hero animations
+                            startHeroAnimations();
+                        }
+                    });
+                }
+            });
+
+            // SVG Line Drawing (RAG: setDashoffset for SVG stroke animation)
+            introTimeline
+                .add({
+                    targets: '#logo-path',
+                    strokeDashoffset: [anime.setDashoffset, 0],
+                    duration: 1500,
+                    delay: 300
+                })
+                .add({
+                    targets: '#logo-circle',
+                    scale: [0, 1],
+                    opacity: [0, 0.5],
+                    duration: 600,
+                    easing: 'easeOutElastic(1, .5)'
+                }, '-=800')
+                .add({
+                    targets: '.boot-text',
+                    opacity: [0, 1],
+                    translateY: [20, 0],
+                    delay: anime.stagger(150),
+                    duration: 600
+                });
+
+            function startHeroAnimations() {
+                // Hero Title (RAG: easeOutExpo for smooth reveals)
+                anime({
+                    targets: '.hero-title',
+                    opacity: [0, 1],
+                    translateY: [80, 0],
+                    duration: 1200,
+                    easing: 'easeOutExpo'
+                });
+
+                // Hero Subtitle
+                anime({
+                    targets: '.hero-sub',
+                    opacity: [0, 1],
+                    translateX: [-40, 0],
+                    duration: 1000,
+                    delay: 400,
+                    easing: 'easeOutExpo'
+                });
+
+                // Project Label (RAG: easeOutElastic for "bounce" feel)
+                anime({
+                    targets: '.project-label',
+                    opacity: [0, 1],
+                    translateY: [20, 0],
+                    duration: 800,
+                    delay: 600,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+
+                // Status Bar
+                anime({
+                    targets: '#status-bar',
+                    opacity: [0, 1],
+                    translateY: [10, 0],
+                    duration: 600,
+                    delay: 1000,
+                    easing: 'easeOutExpo'
+                });
+            }
+        });
+    </script>
+</body>
+</html>
